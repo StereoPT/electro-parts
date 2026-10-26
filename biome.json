@@ -14,7 +14,9 @@
       "!.next",
       "!dist",
       "!build",
-      "!src/components/ui"
+      "!src/components/ui",
+      "!src/hooks/use-highlighted-code.ts",
+      "!src/lib/highlighter.tsx"
     ]
   },
   "formatter": {
