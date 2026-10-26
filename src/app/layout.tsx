@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Raleway, Space_Grotesk } from "next/font/google";
+import { AppSidebar } from "@/components/layout/AppSidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppProviders } from "@/providers/AppProviders";
 import "./globals.css";
 import { cn } from "@/lib/utils";
@@ -32,7 +34,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
     >
       <body className="min-h-full flex flex-col">
-        <AppProviders>{children}</AppProviders>
+        <AppProviders>
+          <SidebarProvider>
+            <AppSidebar />
+            <SidebarInset>{children}</SidebarInset>
+          </SidebarProvider>
+        </AppProviders>
       </body>
     </html>
   );
