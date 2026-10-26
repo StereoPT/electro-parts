@@ -3,6 +3,7 @@ import { Raleway, Space_Grotesk } from "next/font/google";
 import { AppSidebar } from "@/components/layout/AppSidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppProviders } from "@/providers/AppProviders";
+import "@stereopt/data-table/styles.css";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
