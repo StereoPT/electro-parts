@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { AddComponentButton } from "@/components/components/AddComponentButton";
 import {
   Empty,
   EmptyContent,
@@ -19,7 +19,7 @@ export const ComponentsEmptyState = () => {
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <Button type="button">Add component</Button>
+        <AddComponentButton />
       </EmptyContent>
     </Empty>
   );
