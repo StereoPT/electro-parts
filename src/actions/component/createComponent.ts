@@ -1,34 +1,21 @@
 "use server";
 
 import { z } from "zod";
-import type { Component } from "@/generated/prisma/client";
 import { Prisma } from "@/generated/prisma/client";
 import { toIdentityKeys } from "@/lib/componentIdentity";
+import {
+  type ComponentResult,
+  duplicateComponentResult,
+} from "@/lib/componentResult";
 import { prisma } from "@/lib/prisma";
 import {
   type ComponentFormInput,
   componentSchema,
 } from "@/schemas/componentSchema";
 
-export type ComponentFieldErrors = Partial<
-  Record<keyof ComponentFormInput, string[]>
->;
-
-export type CreateComponentResult =
-  | { success: true; component: Component }
-  | { success: false; fieldErrors: ComponentFieldErrors };
-
-const DUPLICATE_ERROR =
-  "A component with this name and manufacturer already exists.";
-
-const duplicate = (): CreateComponentResult => ({
-  fieldErrors: { name: [DUPLICATE_ERROR] },
-  success: false,
-});
-
 export const createComponent = async (
   input: ComponentFormInput,
-): Promise<CreateComponentResult> => {
+): Promise<ComponentResult> => {
   const parsed = componentSchema.safeParse(input);
   if (!parsed.success) {
     return {
@@ -44,7 +31,7 @@ export const createComponent = async (
     where: { nameKey_manufacturerKey: keys },
   });
   if (existing) {
-    return duplicate();
+    return duplicateComponentResult();
   }
 
   try {
@@ -57,7 +44,7 @@ export const createComponent = async (
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === "P2002"
     ) {
-      return duplicate();
+      return duplicateComponentResult();
     }
     throw error;
   }

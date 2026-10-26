@@ -23,6 +23,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/toast";
 import type { Component } from "@/generated/prisma/browser";
 import { useCreateComponent } from "@/hooks/component/useCreateComponent";
+import { useUpdateComponent } from "@/hooks/component/useUpdateComponent";
 import {
   type ComponentFormInput,
   type ComponentFormValues,
@@ -30,8 +31,7 @@ import {
 } from "@/schemas/componentSchema";
 
 type ComponentDialogProps = {
-  // When set the dialog edits this Component (wired up in a later ticket);
-  // otherwise it adds a new one.
+  // When set the dialog edits this Component; otherwise it adds a new one.
   component?: Component;
   onOpenChange: (open: boolean) => void;
   open: boolean;
@@ -43,6 +43,8 @@ type ComponentFormProps = Pick<ComponentDialogProps, "component"> & {
 
 const ComponentForm = ({ component, onDone }: ComponentFormProps) => {
   const createComponent = useCreateComponent();
+  const updateComponent = useUpdateComponent();
+  const isPending = createComponent.isPending || updateComponent.isPending;
   const {
     formState: { errors },
     getValues,
@@ -61,9 +63,15 @@ const ComponentForm = ({ component, onDone }: ComponentFormProps) => {
 
   // The action takes the raw form input and re-validates it on the server.
   const onSubmit = handleSubmit(async () => {
-    const result = await createComponent.mutateAsync(getValues());
+    const input = getValues();
+    const result = component
+      ? await updateComponent.mutateAsync({ id: component.id, input })
+      : await createComponent.mutateAsync(input);
     if (result.success) {
-      toast.add({ title: "Component added", type: "success" });
+      toast.add({
+        title: component ? "Component updated" : "Component added",
+        type: "success",
+      });
       onDone();
       return;
     }
@@ -124,7 +132,7 @@ const ComponentForm = ({ component, onDone }: ComponentFormProps) => {
         <DialogClose render={<Button type="button" variant="outline" />}>
           Cancel
         </DialogClose>
-        <Button disabled={createComponent.isPending} type="submit">
+        <Button disabled={isPending} type="submit">
           Save
         </Button>
       </DialogFooter>
