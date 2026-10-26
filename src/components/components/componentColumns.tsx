@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { Component } from "@/generated/prisma/browser";
+import type { Component } from "@/types/component";
 
 type Columns = DataTableProps<Component, unknown>["columns"];
 
@@ -77,6 +77,6 @@ export const createComponentColumns = ({
     enableSorting: false,
     header: "",
     id: "actions",
-    size: 48,
+    size: 56,
   },
 ];

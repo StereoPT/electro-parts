@@ -17,9 +17,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/components/ui/toast";
-import type { Component } from "@/generated/prisma/browser";
+import type { Component } from "@/types/component";
 import { useDeleteComponent } from "@/hooks/component/useDeleteComponent";
 import { useComponents } from "@/hooks/component/useComponents";
+import { formatComponentLabel } from "@/lib/componentIdentity";
 
 export const ComponentsTable = () => {
   const { data, isPending } = useComponents();
@@ -35,7 +36,15 @@ export const ComponentsTable = () => {
     if (!deleting) {
       return;
     }
-    await deleteComponent.mutateAsync(deleting.id);
+    try {
+      const result = await deleteComponent.mutateAsync(deleting.id);
+      if (!result.success) {
+        throw new Error("Delete failed");
+      }
+    } catch {
+      toast.add({ title: "Could not delete component", type: "error" });
+      return;
+    }
     toast.add({ title: "Component deleted", type: "success" });
     setDeleting(null);
   };
@@ -83,8 +92,7 @@ export const ComponentsTable = () => {
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>
-                Delete {deleting.name}
-                {deleting.manufacturer ? ` (${deleting.manufacturer})` : ""}?
+                Delete {formatComponentLabel(deleting)}?
               </AlertDialogTitle>
               <AlertDialogDescription>
                 This can't be undone.

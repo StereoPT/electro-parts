@@ -21,7 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/toast";
-import type { Component } from "@/generated/prisma/browser";
+import type { Component } from "@/types/component";
 import { useCreateComponent } from "@/hooks/component/useCreateComponent";
 import { useUpdateComponent } from "@/hooks/component/useUpdateComponent";
 import {
@@ -36,6 +36,19 @@ type ComponentDialogProps = {
   onOpenChange: (open: boolean) => void;
   open: boolean;
 };
+
+const COPY = {
+  create: {
+    description: "Record a component you own.",
+    title: "Add component",
+    toast: "Component added",
+  },
+  edit: {
+    description: "Update this component's details.",
+    title: "Edit component",
+    toast: "Component updated",
+  },
+} as const;
 
 type ComponentFormProps = Pick<ComponentDialogProps, "component"> & {
   onDone: () => void;
@@ -62,23 +75,31 @@ const ComponentForm = ({ component, onDone }: ComponentFormProps) => {
   });
 
   // The action takes the raw form input and re-validates it on the server.
+  const copy = COPY[component ? "edit" : "create"];
+
   const onSubmit = handleSubmit(async () => {
     const input = getValues();
-    const result = component
-      ? await updateComponent.mutateAsync({ id: component.id, input })
-      : await createComponent.mutateAsync(input);
-    if (result.success) {
-      toast.add({
-        title: component ? "Component updated" : "Component added",
-        type: "success",
-      });
-      onDone();
-      return;
-    }
-    for (const [field, messages] of Object.entries(result.fieldErrors)) {
-      if (messages?.[0]) {
-        setError(field as keyof ComponentFormInput, { message: messages[0] });
+    try {
+      const result = component
+        ? await updateComponent.mutateAsync({ id: component.id, input })
+        : await createComponent.mutateAsync(input);
+      if (result.success) {
+        toast.add({ title: copy.toast, type: "success" });
+        onDone();
+        return;
       }
+      let hasInlineError = false;
+      for (const [field, messages] of Object.entries(result.fieldErrors)) {
+        if (messages?.[0]) {
+          setError(field as keyof ComponentFormInput, { message: messages[0] });
+          hasInlineError = true;
+        }
+      }
+      if (!hasInlineError) {
+        toast.add({ title: "Could not save component", type: "error" });
+      }
+    } catch {
+      toast.add({ title: "Could not save component", type: "error" });
     }
   });
 
@@ -145,18 +166,14 @@ export const ComponentDialog = ({
   onOpenChange,
   open,
 }: ComponentDialogProps) => {
+  const copy = COPY[component ? "edit" : "create"];
+
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>
-            {component ? "Edit component" : "Add component"}
-          </DialogTitle>
-          <DialogDescription>
-            {component
-              ? "Update this component's details."
-              : "Record a component you own."}
-          </DialogDescription>
+          <DialogTitle>{copy.title}</DialogTitle>
+          <DialogDescription>{copy.description}</DialogDescription>
         </DialogHeader>
         <ComponentForm
           component={component}

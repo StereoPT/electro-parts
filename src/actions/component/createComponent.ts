@@ -1,33 +1,28 @@
 "use server";
 
-import { z } from "zod";
-import { Prisma } from "@/generated/prisma/client";
-import { toIdentityKeys } from "@/lib/componentIdentity";
+import { toComponentIdentityKeys } from "@/lib/componentIdentity";
 import {
   type ComponentResult,
   duplicateComponentResult,
+  parseComponentInput,
+  toComponentWriteFailure,
 } from "@/lib/componentResult";
 import { prisma } from "@/lib/prisma";
-import {
-  type ComponentFormInput,
-  componentSchema,
-} from "@/schemas/componentSchema";
+import type { ComponentFormInput } from "@/schemas/componentSchema";
 
 export const createComponent = async (
   input: ComponentFormInput,
 ): Promise<ComponentResult> => {
-  const parsed = componentSchema.safeParse(input);
+  const parsed = parseComponentInput(input);
   if (!parsed.success) {
-    return {
-      fieldErrors: z.flattenError(parsed.error).fieldErrors,
-      success: false,
-    };
+    return parsed.result;
   }
 
   const { name, manufacturer, description, quantity } = parsed.data;
-  const keys = toIdentityKeys(name, manufacturer);
+  const keys = toComponentIdentityKeys(name, manufacturer);
 
   const existing = await prisma.component.findUnique({
+    select: { id: true },
     where: { nameKey_manufacturerKey: keys },
   });
   if (existing) {
@@ -37,15 +32,10 @@ export const createComponent = async (
   try {
     const component = await prisma.component.create({
       data: { description, manufacturer, name, quantity, ...keys },
+      omit: { manufacturerKey: true, nameKey: true },
     });
     return { component, success: true };
   } catch (error) {
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === "P2002"
-    ) {
-      return duplicateComponentResult();
-    }
-    throw error;
+    return toComponentWriteFailure(error);
   }
 };

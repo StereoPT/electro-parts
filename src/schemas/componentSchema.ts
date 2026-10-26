@@ -25,3 +25,5 @@ export const componentSchema = z.object({
 
 export type ComponentFormInput = z.input<typeof componentSchema>;
 export type ComponentFormValues = z.output<typeof componentSchema>;
+
+export const componentIdSchema = z.number().int().positive();
