@@ -13,12 +13,14 @@ import type { Component } from "@/generated/prisma/browser";
 type Columns = DataTableProps<Component, unknown>["columns"];
 
 type ComponentColumnHandlers = {
+  onDelete: (component: Component) => void;
   onEdit: (component: Component) => void;
 };
 
 // Manufacturer and description use coalescing accessors so the global search
 // still covers them when the first row's value is null.
 export const createComponentColumns = ({
+  onDelete,
   onEdit,
 }: ComponentColumnHandlers): Columns => [
   { accessorKey: "name", header: "Name", id: "name" },
@@ -63,7 +65,12 @@ export const createComponentColumns = ({
           <DropdownMenuItem onClick={() => onEdit(row.original)}>
             Edit
           </DropdownMenuItem>
-          {/* Add further row actions (e.g. Delete) here. */}
+          <DropdownMenuItem
+            onClick={() => onDelete(row.original)}
+            variant="destructive"
+          >
+            Delete
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     ),
