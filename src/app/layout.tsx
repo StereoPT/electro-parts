@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { Raleway, Space_Grotesk } from "next/font/google";
-import { AppSidebar } from "@/components/layout/AppSidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { AppProviders } from "@/providers/AppProviders";
-import "@stereopt/data-table/styles.css";
-import "./globals.css";
+
 import { cn } from "@/lib/utils";
+import { AppProviders } from "@/providers/AppProviders";
+import "./globals.css";
 
 const ralewayHeading = Raleway({
   subsets: ["latin"],
@@ -22,7 +20,7 @@ export const metadata: Metadata = {
   description: "Electro Parts",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+const RootLayout = ({ children }: LayoutProps<"/">) => {
   return (
     <html
       className={cn(
@@ -35,13 +33,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
     >
       <body className="min-h-full flex flex-col">
-        <AppProviders>
-          <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset>{children}</SidebarInset>
-          </SidebarProvider>
-        </AppProviders>
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

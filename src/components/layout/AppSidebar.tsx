@@ -1,27 +1,57 @@
 "use client";
 
-import { Cpu, LayoutDashboard, Zap } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { Cpu, LayoutDashboard, type LucideIcon, Zap } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-const navItems = [
-  { title: "Dashboard", href: "/", icon: LayoutDashboard },
-  { title: "Components", href: "/components", icon: Cpu },
+type Route = {
+  icon: LucideIcon;
+  title: string;
+  url: string;
+};
+
+type GroupedRoute = {
+  key: string;
+  label?: string;
+  items: Route[];
+};
+
+const groupRoutes: GroupedRoute[] = [
+  {
+    key: "dashboard",
+    items: [{ icon: LayoutDashboard, title: "Dashboard", url: "/" }],
+  },
+  {
+    key: "mainMenu",
+    label: "Main Menu",
+    items: [
+      {
+        icon: Cpu,
+        title: "Components",
+        url: "/components",
+      },
+    ],
+  },
 ];
 
-const isActiveRoute = (pathname: string, href: string) =>
-  href === "/" ? pathname === "/" : pathname.startsWith(href);
+const isActive = (routeUrl: string, currentPath: string) => {
+  if (routeUrl === "/") {
+    return currentPath === "/";
+  }
+
+  return currentPath === routeUrl || currentPath.startsWith(`${routeUrl}/`);
+};
 
 export const AppSidebar = () => {
   const pathname = usePathname();
@@ -37,32 +67,42 @@ export const AppSidebar = () => {
               tooltip="Electro Parts"
             >
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <Zap className="size-4" />
+                <Zap />
               </div>
-              <span className="font-semibold">Electro Parts</span>
+              <div className="flex flex-col gap-0.5 leading-none">
+                <span className="font-semibold">Electro Parts</span>
+                <span className="text-xs">v1.0.0</span>
+              </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navItems.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    isActive={isActiveRoute(pathname, item.href)}
-                    render={<Link href={item.href} />}
-                    tooltip={item.title}
-                  >
-                    <item.icon />
-                    <span>{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {groupRoutes.map(({ key, label, items }) => {
+          return (
+            <SidebarGroup key={key}>
+              {label && <SidebarGroupLabel>{label}</SidebarGroupLabel>}
+              <SidebarMenu className="gap-2">
+                {items.map(({ icon, title, url }) => {
+                  const Icon = icon;
+
+                  return (
+                    <SidebarMenuItem key={title}>
+                      <SidebarMenuButton
+                        isActive={isActive(url, pathname)}
+                        render={<Link href={url} />}
+                        tooltip={title}
+                      >
+                        <Icon />
+                        {title}
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroup>
+          );
+        })}
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
