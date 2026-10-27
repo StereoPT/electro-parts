@@ -1,4 +1,5 @@
 import { AddComponent } from "@/actions/components/AddComponent";
+import { toast } from "@/components/ui/toast";
 import { KEYS } from "@/constants/queryKeys";
 import type { addComponentSchemaType } from "@/schemas/componentSchema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -12,8 +13,12 @@ export const useAddComponent = () => {
     },
     onSuccess: (result) => {
       if (result.success) {
+        toast.add({ title: "Component added", type: "success" });
         queryClient.invalidateQueries({ queryKey: KEYS.components });
       }
+    },
+    onError: () => {
+      toast.add({ title: "Could not add component", type: "error" });
     },
   });
 };

@@ -35,7 +35,11 @@ export const DeleteDialog = ({
   onDelete,
 }: DeleteDialogProps) => {
   const handleDelete = useCallback(async () => {
-    await onDelete();
+    try {
+      await onDelete();
+    } catch {
+      return;
+    }
     onOpenChange(false);
   }, [onDelete, onOpenChange]);
 

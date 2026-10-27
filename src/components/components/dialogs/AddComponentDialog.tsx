@@ -36,7 +36,12 @@ export const AddComponentDialog = () => {
 
   const onSubmit = useCallback(
     async (values: addComponentSchemaType) => {
-      const result = await mutateAsync(values);
+      // A thrown error is reported by the mutation's onError toast.
+      const result = await mutateAsync(values).catch(() => null);
+
+      if (!result) {
+        return;
+      }
 
       if (!result.success) {
         form.setError("name", { message: result.fieldErrors.name[0] });
