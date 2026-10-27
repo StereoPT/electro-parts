@@ -12,8 +12,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
-import { useComponent } from "@/hooks/component/useComponent";
-import { useUpdateComponent } from "@/hooks/component/useUpdateComponent";
+import { useComponent } from "@/hooks/components/useComponent";
+import { useUpdateComponent } from "@/hooks/components/useUpdateComponent";
 import {
   defaultComponentValues,
   editComponentSchema,

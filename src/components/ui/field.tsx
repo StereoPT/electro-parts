@@ -1,8 +1,8 @@
 "use client"
 
+import { useMemo } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
-import { useMemo } from "react"
 
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
@@ -225,10 +225,14 @@ function FieldError({
 }
 
 export {
-  Field, FieldContent, FieldDescription,
+  Field,
+  FieldLabel,
+  FieldDescription,
   FieldError,
-  FieldGroup, FieldLabel, FieldLegend,
+  FieldGroup,
+  FieldLegend,
   FieldSeparator,
-  FieldSet, FieldTitle
+  FieldSet,
+  FieldContent,
+  FieldTitle,
 }
-

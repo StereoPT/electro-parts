@@ -2,7 +2,7 @@ import { EditComponentDialog } from "@/components/components/dialogs/EditCompone
 import { DeleteDialog } from "@/components/layout/DeleteDialog";
 import { Button } from "@/components/ui/button";
 import type { Component } from "@/generated/prisma/client";
-import { useDeleteComponent } from "@/hooks/component/useDeleteComponent";
+import { useDeleteComponent } from "@/hooks/components/useDeleteComponent";
 import { Edit, Trash2 } from "lucide-react";
 import { useState } from "react";
 

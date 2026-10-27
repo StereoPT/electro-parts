@@ -4,7 +4,7 @@ import { AddComponentDialog } from "@/components/components/dialogs/AddComponent
 import { EmptyState } from "@/components/layout/EmptyState";
 import { LoadingState } from "@/components/layout/LoadingState";
 import { componentColumns } from "@/constants/componentColumns";
-import { useComponents } from "@/hooks/component/useComponents";
+import { useComponents } from "@/hooks/components/useComponents";
 import { DataTable } from "@stereopt/data-table";
 import { Cpu } from "lucide-react";
 

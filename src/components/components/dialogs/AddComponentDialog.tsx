@@ -13,7 +13,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
-import { useAddComponent } from "@/hooks/component/useAddComponent";
+import { useAddComponent } from "@/hooks/components/useAddComponent";
 import {
   type addComponentSchemaType,
   addComponentSchema,
@@ -48,14 +48,22 @@ export const AddComponentDialog = () => {
         return;
       }
 
-      form.reset();
       setOpen(false);
     },
     [form, mutateAsync],
   );
 
   return (
-    <Dialog onOpenChange={setOpen} open={open}>
+    <Dialog
+      onOpenChange={setOpen}
+      // Clear input and errors once the dialog has finished closing, however it closed.
+      onOpenChangeComplete={(isOpen) => {
+        if (!isOpen) {
+          form.reset();
+        }
+      }}
+      open={open}
+    >
       <DialogTrigger render={<Button />}>Add Component</DialogTrigger>
       <DialogContent className="min-w-lg">
         <DialogHeader>
