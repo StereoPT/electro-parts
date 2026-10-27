@@ -1,13 +1,16 @@
+import { DeleteComponent } from "@/actions/components/DeleteComponent";
+import { KEYS } from "@/constants/queryKeys";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteComponent } from "@/actions/component/deleteComponent";
-import { queryKeys } from "@/constants/queryKeys";
 
-export const useDeleteComponent = () => {
+export const useDeleteComponent = (componentId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => deleteComponent(id),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: queryKeys.components }),
+    mutationFn: () => {
+      return DeleteComponent(componentId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: KEYS.components });
+    },
   });
 };

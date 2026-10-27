@@ -8,16 +8,15 @@ datasource db {
 }
 
 model Component {
-  id              Int      @id @default(autoincrement())
+  id              String            @id @default(uuid())
+  
   name            String
-  manufacturer    String?
+  quantity        Int               @default(0)
+  manufacturer    String?           @default("")
   description     String?
-  quantity        Int      @default(0)
-  // Normalized identity (see src/lib/componentIdentity.ts); "" = no Manufacturer.
-  nameKey         String
-  manufacturerKey String   @default("")
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
 
-  @@unique([nameKey, manufacturerKey])
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@unique([ name, manufacturer ])
 }

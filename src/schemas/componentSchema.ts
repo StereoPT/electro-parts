@@ -1,17 +1,13 @@
 import { z } from "zod";
 
-export const componentSchema = z.object({
-  description: z
-    .string()
-    .max(1000, "Description must be 1000 characters or fewer")
-    .optional()
-    .transform((value) => (value?.trim() ? value : null)),
-  manufacturer: z
-    .string()
-    .trim()
-    .max(100, "Manufacturer must be 100 characters or fewer")
-    .optional()
-    .transform((value) => (value ? value : null)),
+export const defaultComponentValues = {
+  name: "",
+  quantity: 0,
+  manufacturer: "",
+  description: "",
+};
+
+export const addComponentSchema = z.object({
   name: z
     .string()
     .trim()
@@ -21,9 +17,19 @@ export const componentSchema = z.object({
     .number({ error: "Quantity is required" })
     .int("Quantity must be a whole number")
     .min(0, "Quantity must be 0 or more"),
+  manufacturer: z
+    .string()
+    .trim()
+    .max(100, "Manufacturer must be 100 characters or fewer")
+    .optional(),
+  description: z
+    .string()
+    .trim()
+    .max(1000, "Description must be 1000 characters or fewer")
+    .optional(),
 });
 
-export type ComponentFormInput = z.input<typeof componentSchema>;
-export type ComponentFormValues = z.output<typeof componentSchema>;
+export const editComponentSchema = addComponentSchema.partial();
 
-export const componentIdSchema = z.number().int().positive();
+export type addComponentSchemaType = z.input<typeof addComponentSchema>;
+export type editComponentSchemaType = z.input<typeof editComponentSchema>;

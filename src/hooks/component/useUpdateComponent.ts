@@ -1,25 +1,17 @@
+import { UpdateComponent } from "@/actions/components/UpdateComponent";
+import { KEYS } from "@/constants/queryKeys";
+import type { editComponentSchemaType } from "@/schemas/componentSchema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateComponent } from "@/actions/component/updateComponent";
-import { queryKeys } from "@/constants/queryKeys";
-import type { ComponentFormInput } from "@/schemas/componentSchema";
 
-type UpdateComponentVariables = {
-  id: number;
-  input: ComponentFormInput;
-};
-
-export const useUpdateComponent = () => {
+export const useUpdateComponent = (componentId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, input }: UpdateComponentVariables) =>
-      updateComponent(id, input),
-    onSuccess: (result) => {
-      if (result.success) {
-        return queryClient.invalidateQueries({
-          queryKey: queryKeys.components,
-        });
-      }
+    mutationFn: (data: editComponentSchemaType) => {
+      return UpdateComponent(componentId, data);
+    },
+    onSuccess: () => {
+      return queryClient.invalidateQueries({ queryKey: KEYS.components });
     },
   });
 };
