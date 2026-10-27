@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Raleway, Space_Grotesk } from "next/font/google";
+
+import { cn } from "@/lib/utils";
 import { AppProviders } from "@/providers/AppProviders";
 import "./globals.css";
-import { cn } from "@/lib/utils";
 
 const ralewayHeading = Raleway({
   subsets: ["latin"],
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
   description: "Electro Parts",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+const RootLayout = ({ children }: LayoutProps<"/">) => {
   return (
     <html
       className={cn(
@@ -36,4 +37,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

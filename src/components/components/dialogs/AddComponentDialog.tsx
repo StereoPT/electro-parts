@@ -1,0 +1,92 @@
+"use client";
+
+import { ComponentFormFields } from "@/components/components/ComponentFormFields";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Spinner } from "@/components/ui/spinner";
+import { useAddComponent } from "@/hooks/components/useAddComponent";
+import {
+  type addComponentSchemaType,
+  addComponentSchema,
+  defaultComponentValues,
+} from "@/schemas/componentSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useCallback, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+
+export const AddComponentDialog = () => {
+  const formId = "add-component";
+  const [open, setOpen] = useState(false);
+
+  const form = useForm<addComponentSchemaType>({
+    resolver: zodResolver(addComponentSchema),
+    defaultValues: defaultComponentValues,
+  });
+
+  const { mutateAsync, isPending } = useAddComponent();
+
+  const onSubmit = useCallback(
+    async (values: addComponentSchemaType) => {
+      // A thrown error is reported by the mutation's onError toast.
+      const result = await mutateAsync(values).catch(() => null);
+
+      if (!result) {
+        return;
+      }
+
+      if (!result.success) {
+        form.setError("name", { message: result.fieldErrors.name[0] });
+        return;
+      }
+
+      setOpen(false);
+    },
+    [form, mutateAsync],
+  );
+
+  return (
+    <Dialog
+      onOpenChange={setOpen}
+      // Clear input and errors once the dialog has finished closing, however it closed.
+      onOpenChangeComplete={(isOpen) => {
+        if (!isOpen) {
+          form.reset();
+        }
+      }}
+      open={open}
+    >
+      <DialogTrigger render={<Button />}>Add Component</DialogTrigger>
+      <DialogContent className="min-w-lg">
+        <DialogHeader>
+          <DialogTitle>Add Component</DialogTitle>
+          <DialogDescription>Record a component you own.</DialogDescription>
+        </DialogHeader>
+
+        <FormProvider {...form}>
+          <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
+            <ComponentFormFields formId={formId} />
+          </form>
+        </FormProvider>
+
+        <DialogFooter>
+          <DialogClose render={<Button variant="outline" />}>
+            Cancel
+          </DialogClose>
+          <Button disabled={isPending} form={formId} type="submit">
+            {isPending && <Spinner />}
+            Add Component
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
