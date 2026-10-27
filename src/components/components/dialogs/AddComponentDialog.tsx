@@ -36,7 +36,13 @@ export const AddComponentDialog = () => {
 
   const onSubmit = useCallback(
     async (values: addComponentSchemaType) => {
-      await mutateAsync(values);
+      const result = await mutateAsync(values);
+
+      if (!result.success) {
+        form.setError("name", { message: result.fieldErrors.name[0] });
+        return;
+      }
+
       form.reset();
       setOpen(false);
     },

@@ -10,8 +10,10 @@ export const useUpdateComponent = (componentId: string) => {
     mutationFn: (data: editComponentSchemaType) => {
       return UpdateComponent(componentId, data);
     },
-    onSuccess: () => {
-      return queryClient.invalidateQueries({ queryKey: KEYS.components });
+    onSuccess: (result) => {
+      if (result.success) {
+        return queryClient.invalidateQueries({ queryKey: KEYS.components });
+      }
     },
   });
 };

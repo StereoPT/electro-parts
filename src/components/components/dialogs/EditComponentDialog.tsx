@@ -56,10 +56,16 @@ export const EditComponentDialog = ({
 
   const onSubmit = useCallback(
     async (values: editComponentSchemaType) => {
-      await mutateAsync(values);
+      const result = await mutateAsync(values);
+
+      if (!result.success) {
+        form.setError("name", { message: result.fieldErrors.name[0] });
+        return;
+      }
+
       onOpenChange(false);
     },
-    [mutateAsync, onOpenChange],
+    [form, mutateAsync, onOpenChange],
   );
 
   return (

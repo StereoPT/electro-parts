@@ -10,8 +10,10 @@ export const useAddComponent = () => {
     mutationFn: (data: addComponentSchemaType) => {
       return AddComponent(data);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: KEYS.components });
+    onSuccess: (result) => {
+      if (result.success) {
+        queryClient.invalidateQueries({ queryKey: KEYS.components });
+      }
     },
   });
 };

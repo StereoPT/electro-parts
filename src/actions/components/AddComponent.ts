@@ -1,5 +1,6 @@
 "use server";
 
+import { handleComponentWriteError } from "@/lib/componentErrors";
 import { prisma } from "@/lib/prisma";
 import {
   addComponentSchema,
@@ -13,5 +14,11 @@ export const AddComponent = async (values: addComponentSchemaType) => {
     throw new Error("Invalid form data");
   }
 
-  await prisma.component.create({ data });
+  try {
+    await prisma.component.create({ data });
+  } catch (error) {
+    return handleComponentWriteError(error);
+  }
+
+  return { success: true } as const;
 };

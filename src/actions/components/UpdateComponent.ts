@@ -1,5 +1,6 @@
 "use server";
 
+import { handleComponentWriteError } from "@/lib/componentErrors";
 import { prisma } from "@/lib/prisma";
 import {
   editComponentSchema,
@@ -16,8 +17,14 @@ export const UpdateComponent = async (
     throw new Error("Invalid form data");
   }
 
-  await prisma.component.update({
-    where: { id: componentId },
-    data,
-  });
+  try {
+    await prisma.component.update({
+      where: { id: componentId },
+      data,
+    });
+  } catch (error) {
+    return handleComponentWriteError(error);
+  }
+
+  return { success: true } as const;
 };
