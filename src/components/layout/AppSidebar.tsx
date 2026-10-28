@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { Cpu, LayoutDashboard, type LucideIcon, Zap } from "lucide-react";
+import { Cpu, LayoutDashboard, type LucideIcon, Tags, Zap } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -40,6 +40,11 @@ const groupRoutes: GroupedRoute[] = [
         icon: Cpu,
         title: "Components",
         url: "/components",
+      },
+      {
+        icon: Tags,
+        title: "Categories",
+        url: "/categories",
       },
     ],
   },

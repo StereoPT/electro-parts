@@ -15,3 +15,7 @@ _Avoid_: Stock, amount, count
 **Manufacturer**:
 The company that makes a Component (e.g. "Yageo", "Texas Instruments").
 _Avoid_: Brand, vendor, supplier
+
+**Category**:
+A named group the owner files Components under (e.g. "Resistors", "Capacitors"). Categories are a flat list: they do not nest. A Component belongs to at most one Category; a Component with none is **uncategorized**. A Category is identified by its name alone, and names are compared exactly, so "Resistors" and "resistors" are two Categories.
+_Avoid_: Type, tag, group
