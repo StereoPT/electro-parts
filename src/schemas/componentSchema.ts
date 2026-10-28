@@ -3,6 +3,7 @@ import { z } from "zod";
 export const defaultComponentValues = {
   name: "",
   quantity: 0,
+  minimumQuantity: 0,
   manufacturer: "",
   categoryId: null,
   description: "",
@@ -18,6 +19,10 @@ export const addComponentSchema = z.object({
     .number({ error: "Quantity is required" })
     .int("Quantity must be a whole number")
     .min(0, "Quantity must be 0 or more"),
+  minimumQuantity: z
+    .number({ error: "Minimum quantity is required" })
+    .int("Minimum quantity must be a whole number")
+    .min(0, "Minimum quantity must be 0 or more"),
   manufacturer: z
     .string()
     .trim()
