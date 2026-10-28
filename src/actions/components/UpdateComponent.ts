@@ -1,11 +1,14 @@
 "use server";
 
-import { handleComponentWriteError } from "@/lib/componentErrors";
 import { prisma } from "@/lib/prisma";
+import { handleUniqueViolation } from "@/lib/writeErrors";
 import {
   editComponentSchema,
   type editComponentSchemaType,
 } from "@/schemas/componentSchema";
+
+const DUPLICATE_COMPONENT_MESSAGE =
+  "A component with this name and manufacturer already exists.";
 
 export const UpdateComponent = async (
   componentId: string,
@@ -23,7 +26,7 @@ export const UpdateComponent = async (
       data,
     });
   } catch (error) {
-    return handleComponentWriteError(error);
+    return handleUniqueViolation(error, DUPLICATE_COMPONENT_MESSAGE);
   }
 
   return { success: true } as const;
