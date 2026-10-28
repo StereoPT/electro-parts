@@ -2,6 +2,7 @@
 
 import type { ComponentRow } from "@/actions/components/GetComponents";
 import { ComponentActions } from "@/components/components/ComponentActions";
+import { StockBadge } from "@/components/components/StockBadge";
 import { Badge } from "@/components/ui/badge";
 import type { ColumnDef } from "@tanstack/react-table";
 
@@ -39,14 +40,13 @@ export const componentColumns: ColumnDef<ComponentRow>[] = [
     accessorKey: "quantity",
     header: "Quantity",
     cell: ({ row }) => {
-      const { quantity } = row.original;
+      const { quantity, minimumQuantity } = row.original;
 
-      return quantity === 0 ? (
-        <Badge className="text-muted-foreground" variant="secondary">
-          Out of stock
-        </Badge>
-      ) : (
-        <span className="tabular-nums">{quantity}</span>
+      return (
+        <span className="inline-flex items-center gap-2">
+          {quantity > 0 && <span className="tabular-nums">{quantity}</span>}
+          <StockBadge minimumQuantity={minimumQuantity} quantity={quantity} />
+        </span>
       );
     },
   },
