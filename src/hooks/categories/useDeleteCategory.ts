@@ -12,7 +12,9 @@ export const useDeleteCategory = (categoryId: string) => {
     },
     onSuccess: () => {
       toast.add({ title: "Category deleted", type: "success" });
+
       queryClient.invalidateQueries({ queryKey: KEYS.categories });
+      queryClient.invalidateQueries({ queryKey: KEYS.components });
     },
     onError: () => {
       toast.add({ title: "Could not delete category", type: "error" });

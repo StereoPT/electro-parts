@@ -20,6 +20,7 @@ import {
 type DeleteDialogProps = {
   title?: string;
   description: ReactNode;
+  children?: ReactNode;
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
   isPending: boolean;
@@ -29,6 +30,7 @@ type DeleteDialogProps = {
 export const DeleteDialog = ({
   title = "Are you absolutely sure?",
   description,
+  children,
   open,
   onOpenChange,
   isPending,
@@ -45,11 +47,12 @@ export const DeleteDialog = ({
 
   return (
     <AlertDialog onOpenChange={onOpenChange} open={open}>
-      <AlertDialogContent finalFocus={false}>
+      <AlertDialogContent className="min-w-lg" finalFocus={false}>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
+        {children}
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
           <AlertDialogAction

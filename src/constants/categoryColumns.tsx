@@ -1,10 +1,10 @@
 "use client";
 
+import type { CategoryRow } from "@/actions/categories/GetCategories";
 import { CategoryActions } from "@/components/categories/CategoryActions";
-import type { Category } from "@/generated/prisma/client";
 import type { ColumnDef } from "@tanstack/react-table";
 
-export const categoryColumns: ColumnDef<Category>[] = [
+export const categoryColumns: ColumnDef<CategoryRow>[] = [
   {
     accessorKey: "name",
     header: "Name",

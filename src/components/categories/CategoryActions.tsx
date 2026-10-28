@@ -1,13 +1,14 @@
+import type { CategoryRow } from "@/actions/categories/GetCategories";
 import { EditCategoryDialog } from "@/components/categories/dialogs/EditCategoryDialog";
 import { DeleteDialog } from "@/components/layout/DeleteDialog";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import type { Category } from "@/generated/prisma/client";
 import { useDeleteCategory } from "@/hooks/categories/useDeleteCategory";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Info, Trash2, TriangleAlert } from "lucide-react";
 import { useState } from "react";
 
 type CategoryActionsProps = {
-  category: Category;
+  category: CategoryRow;
 };
 
 export const CategoryActions = ({ category }: CategoryActionsProps) => {
@@ -16,21 +17,33 @@ export const CategoryActions = ({ category }: CategoryActionsProps) => {
 
   const { mutateAsync, isPending } = useDeleteCategory(category.id);
 
+  const componentCount = category._count.components;
+  const hasComponents = componentCount > 0;
+  const impact = hasComponents
+    ? `${componentCount} ${componentCount === 1 ? "component" : "components"} will become uncategorized.`
+    : "No components use this category.";
+
   return (
     <>
       {showDeleteAlert && (
         <DeleteDialog
           description={
             <span>
-              This will permanently delete <b>{category.name}</b>. This action
-              cannot be undone.
+              This will permanently delete <b>{category.name}</b>.
+              <br />
+              This action cannot be undone.
             </span>
           }
           isPending={isPending}
           onDelete={mutateAsync}
           onOpenChange={setShowDeleteAlert}
           open={showDeleteAlert}
-        />
+        >
+          <Alert variant={hasComponents ? "destructive" : "default"}>
+            {hasComponents ? <TriangleAlert /> : <Info />}
+            <AlertTitle>{impact}</AlertTitle>
+          </Alert>
+        </DeleteDialog>
       )}
 
       {showEditDialog && (
