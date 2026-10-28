@@ -14,7 +14,11 @@ export const useUpdateCategory = (categoryId: string) => {
     onSuccess: (result) => {
       if (result.success) {
         toast.add({ title: "Category updated", type: "success" });
-        return queryClient.invalidateQueries({ queryKey: KEYS.categories });
+
+        return Promise.all([
+          queryClient.invalidateQueries({ queryKey: KEYS.categories }),
+          queryClient.invalidateQueries({ queryKey: KEYS.components }),
+        ]);
       }
     },
     onError: () => {

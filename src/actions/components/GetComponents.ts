@@ -10,3 +10,5 @@ export const GetComponents = async () => {
 
   return components;
 };
+
+export type ComponentRow = Awaited<ReturnType<typeof GetComponents>>[number];

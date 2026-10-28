@@ -14,7 +14,10 @@ export const useUpdateComponent = (componentId: string) => {
     onSuccess: (result) => {
       if (result.success) {
         toast.add({ title: "Component updated", type: "success" });
-        return queryClient.invalidateQueries({ queryKey: KEYS.components });
+        return Promise.all([
+          queryClient.invalidateQueries({ queryKey: KEYS.components }),
+          queryClient.invalidateQueries({ queryKey: KEYS.categories }),
+        ]);
       }
     },
     onError: () => {

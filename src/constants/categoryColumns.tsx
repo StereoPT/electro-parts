@@ -10,6 +10,16 @@ export const categoryColumns: ColumnDef<CategoryRow>[] = [
     header: "Name",
   },
   {
+    id: "components",
+    header: "Components",
+    accessorFn: (category) => category._count.components,
+    cell: ({ row }) => {
+      const { components } = row.original._count;
+
+      return <span className="tabular-nums">{components}</span>;
+    },
+  },
+  {
     id: "actions",
     header: () => null,
     size: 50,

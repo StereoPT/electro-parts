@@ -12,7 +12,10 @@ export const useDeleteComponent = (componentId: string) => {
     },
     onSuccess: () => {
       toast.add({ title: "Component deleted", type: "success" });
-      queryClient.invalidateQueries({ queryKey: KEYS.components });
+      return Promise.all([
+        queryClient.invalidateQueries({ queryKey: KEYS.components }),
+        queryClient.invalidateQueries({ queryKey: KEYS.categories }),
+      ]);
     },
     onError: () => {
       toast.add({ title: "Could not delete component", type: "error" });
