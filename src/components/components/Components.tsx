@@ -31,7 +31,7 @@ export const Components = () => {
       columns={componentColumns}
       config={{
         search: {
-          filterFields: ["name", "manufacturer", "description"],
+          filterFields: ["name", "manufacturer"],
           placeholder: "Search components…",
         },
       }}
