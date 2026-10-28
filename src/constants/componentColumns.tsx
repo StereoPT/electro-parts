@@ -48,17 +48,8 @@ export const componentColumns: ColumnDef<ComponentRow>[] = [
           Out of stock
         </Badge>
       ) : (
-        quantity
+        <span className="tabular-nums">{quantity}</span>
       );
-    },
-  },
-  {
-    accessorKey: "description",
-    header: "Description",
-    cell: ({ row }) => {
-      const { description } = row.original;
-
-      return description ?? "";
     },
   },
   {
