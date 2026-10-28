@@ -113,26 +113,51 @@ export const ComponentFormFields = ({ formId }: ComponentFormFieldsProps) => {
         )}
       />
 
-      <Controller
-        control={control}
-        name="quantity"
-        render={({ field, fieldState }) => (
-          <Field data-invalid={!!fieldState.error}>
-            <FieldLabel htmlFor={`${formId}-quantity`}>Quantity</FieldLabel>
-            <Input
-              {...field}
-              id={`${formId}-quantity`}
-              inputMode="numeric"
-              onChange={(event) => field.onChange(event.target.valueAsNumber)}
-              placeholder="Quantity"
-              step={1}
-              type="number"
-              value={Number.isNaN(field.value) ? "" : field.value}
-            />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
+      <div className="grid grid-cols-2 gap-4">
+        <Controller
+          control={control}
+          name="quantity"
+          render={({ field, fieldState }) => (
+            <Field data-invalid={!!fieldState.error}>
+              <FieldLabel htmlFor={`${formId}-quantity`}>Quantity</FieldLabel>
+              <Input
+                {...field}
+                id={`${formId}-quantity`}
+                inputMode="numeric"
+                onChange={(event) => field.onChange(event.target.valueAsNumber)}
+                placeholder="Quantity"
+                step={1}
+                type="number"
+                value={Number.isNaN(field.value) ? "" : field.value}
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="minimumQuantity"
+          render={({ field, fieldState }) => (
+            <Field data-invalid={!!fieldState.error}>
+              <FieldLabel htmlFor={`${formId}-minimum-quantity`}>
+                Minimum quantity
+              </FieldLabel>
+              <Input
+                {...field}
+                id={`${formId}-minimum-quantity`}
+                inputMode="numeric"
+                onChange={(event) => field.onChange(event.target.valueAsNumber)}
+                placeholder="Minimum quantity"
+                step={1}
+                type="number"
+                value={Number.isNaN(field.value) ? "" : field.value}
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+      </div>
 
       <Controller
         control={control}

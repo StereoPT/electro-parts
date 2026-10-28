@@ -47,6 +47,7 @@ export const EditComponentDialog = ({
           manufacturer: component.manufacturer ?? undefined,
           categoryId: component.categoryId,
           quantity: component.quantity,
+          minimumQuantity: component.minimumQuantity,
           description: component.description ?? undefined,
         }
       : undefined,
