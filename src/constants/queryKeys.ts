@@ -6,4 +6,5 @@ export const KEYS = {
   component: (componentId: string) => [COMPONENTS, componentId],
 
   categories: [CATEGORIES],
+  category: (categoryId: string) => [CATEGORIES, categoryId],
 } as const;
