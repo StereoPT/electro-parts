@@ -1,11 +1,13 @@
 "use client";
 
+import type { GetComponents } from "@/actions/components/GetComponents";
 import { ComponentActions } from "@/components/components/ComponentActions";
 import { Badge } from "@/components/ui/badge";
-import type { Component } from "@/generated/prisma/client";
 import type { ColumnDef } from "@tanstack/react-table";
 
-export const componentColumns: ColumnDef<Component>[] = [
+type ComponentRow = Awaited<ReturnType<typeof GetComponents>>[number];
+
+export const componentColumns: ColumnDef<ComponentRow>[] = [
   {
     accessorKey: "name",
     header: "Name",
@@ -17,6 +19,22 @@ export const componentColumns: ColumnDef<Component>[] = [
       const { manufacturer } = row.original;
 
       return manufacturer ?? "";
+    },
+  },
+  {
+    id: "category",
+    header: "Category",
+    accessorFn: (component) => component.category?.name,
+    cell: ({ row }) => {
+      const category = row.original.category;
+
+      return category ? (
+        <Badge variant="outline">{category.name}</Badge>
+      ) : (
+        <Badge className="text-muted-foreground" variant="secondary">
+          Uncategorized
+        </Badge>
+      );
     },
   },
   {
