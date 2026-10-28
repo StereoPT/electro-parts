@@ -36,7 +36,6 @@ export const AddComponentDialog = () => {
 
   const onSubmit = useCallback(
     async (values: addComponentSchemaType) => {
-      // A thrown error is reported by the mutation's onError toast.
       const result = await mutateAsync(values).catch(() => null);
 
       if (!result) {
@@ -56,7 +55,6 @@ export const AddComponentDialog = () => {
   return (
     <Dialog
       onOpenChange={setOpen}
-      // Clear input and errors once the dialog has finished closing, however it closed.
       onOpenChangeComplete={(isOpen) => {
         if (!isOpen) {
           form.reset();
