@@ -1,7 +1,9 @@
 import { EditCategoryDialog } from "@/components/categories/dialogs/EditCategoryDialog";
+import { DeleteDialog } from "@/components/layout/DeleteDialog";
 import { Button } from "@/components/ui/button";
 import type { Category } from "@/generated/prisma/client";
-import { Edit } from "lucide-react";
+import { useDeleteCategory } from "@/hooks/categories/useDeleteCategory";
+import { Edit, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 type CategoryActionsProps = {
@@ -9,10 +11,28 @@ type CategoryActionsProps = {
 };
 
 export const CategoryActions = ({ category }: CategoryActionsProps) => {
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
+
+  const { mutateAsync, isPending } = useDeleteCategory(category.id);
 
   return (
     <>
+      {showDeleteAlert && (
+        <DeleteDialog
+          description={
+            <span>
+              This will permanently delete <b>{category.name}</b>. This action
+              cannot be undone.
+            </span>
+          }
+          isPending={isPending}
+          onDelete={mutateAsync}
+          onOpenChange={setShowDeleteAlert}
+          open={showDeleteAlert}
+        />
+      )}
+
       {showEditDialog && (
         <EditCategoryDialog
           categoryId={category.id}
@@ -29,6 +49,14 @@ export const CategoryActions = ({ category }: CategoryActionsProps) => {
           variant="ghost"
         >
           <Edit />
+        </Button>
+        <Button
+          aria-label={`Delete ${category.name}`}
+          onClick={() => setShowDeleteAlert(true)}
+          size="icon"
+          variant="destructive"
+        >
+          <Trash2 />
         </Button>
       </div>
     </>
