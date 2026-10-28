@@ -1,11 +1,9 @@
 "use client";
 
-import type { GetComponents } from "@/actions/components/GetComponents";
+import type { ComponentRow } from "@/actions/components/GetComponents";
 import { ComponentActions } from "@/components/components/ComponentActions";
 import { Badge } from "@/components/ui/badge";
 import type { ColumnDef } from "@tanstack/react-table";
-
-type ComponentRow = Awaited<ReturnType<typeof GetComponents>>[number];
 
 export const componentColumns: ColumnDef<ComponentRow>[] = [
   {
