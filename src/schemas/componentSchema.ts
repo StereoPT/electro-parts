@@ -4,6 +4,7 @@ export const defaultComponentValues = {
   name: "",
   quantity: 0,
   manufacturer: "",
+  categoryId: null,
   description: "",
 };
 
@@ -22,6 +23,7 @@ export const addComponentSchema = z.object({
     .trim()
     .max(100, "Manufacturer must be 100 characters or fewer")
     .optional(),
+  categoryId: z.string().nullable().optional(),
   description: z
     .string()
     .trim()

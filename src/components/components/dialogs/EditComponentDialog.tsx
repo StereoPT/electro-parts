@@ -45,6 +45,7 @@ export const EditComponentDialog = ({
       ? {
           name: component.name,
           manufacturer: component.manufacturer ?? undefined,
+          categoryId: component.categoryId,
           quantity: component.quantity,
           description: component.description ?? undefined,
         }

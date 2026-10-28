@@ -15,6 +15,9 @@ model Component {
   manufacturer    String            @default("")
   description     String            @default("")
 
+  categoryId      String?
+  category        Category?         @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
 
@@ -25,6 +28,8 @@ model Category {
   id              String            @id @default(uuid())
 
   name            String            @unique
+
+  components      Component[]
 
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
