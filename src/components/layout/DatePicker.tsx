@@ -7,12 +7,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { DISPLAY_FORMAT, VALUE_FORMAT } from "@/lib/dates";
 import { format, isValid, parse } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
-
-const VALUE_FORMAT = "yyyy-MM-dd";
-const DISPLAY_FORMAT = "dd-MM-yyyy";
 
 type DatePickerProps = {
   id?: string;
