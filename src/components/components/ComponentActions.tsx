@@ -24,8 +24,10 @@ export const ComponentActions = ({ component }: ComponentActionsProps) => {
         <DeleteDialog
           description={
             <span>
-              This will permanently delete <b>{component.name}</b>. This action
-              cannot be undone.
+              This will permanently delete <b>{component.name}</b> and its
+              adjustment history.
+              <br />
+              This action cannot be undone.
             </span>
           }
           isPending={isPending}
