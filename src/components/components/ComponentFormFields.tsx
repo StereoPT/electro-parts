@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { FormType } from "@/constants/formType";
 import { useCategories } from "@/hooks/categories/useCategories";
 import type {
   addComponentSchemaType,
@@ -27,9 +28,13 @@ type ComponentSchema = addComponentSchemaType | editComponentSchemaType;
 
 type ComponentFormFieldsProps = {
   formId: string;
+  type: FormType;
 };
 
-export const ComponentFormFields = ({ formId }: ComponentFormFieldsProps) => {
+export const ComponentFormFields = ({
+  formId,
+  type,
+}: ComponentFormFieldsProps) => {
   const { control } = useFormContext<ComponentSchema>();
   const { data: categories } = useCategories();
 
@@ -122,6 +127,7 @@ export const ComponentFormFields = ({ formId }: ComponentFormFieldsProps) => {
               <FieldLabel htmlFor={`${formId}-quantity`}>Quantity</FieldLabel>
               <Input
                 {...field}
+                disabled={type === FormType.EDIT}
                 id={`${formId}-quantity`}
                 inputMode="numeric"
                 onChange={(event) => field.onChange(event.target.valueAsNumber)}

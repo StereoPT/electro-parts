@@ -12,6 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { FormType } from "@/constants/formType";
 import { Spinner } from "@/components/ui/spinner";
 import { useAddComponent } from "@/hooks/components/useAddComponent";
 import {
@@ -71,7 +72,7 @@ export const AddComponentDialog = () => {
 
         <FormProvider {...form}>
           <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
-            <ComponentFormFields formId={formId} />
+            <ComponentFormFields formId={formId} type={FormType.ADD} />
           </form>
         </FormProvider>
 

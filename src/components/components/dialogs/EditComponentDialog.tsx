@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { FormType } from "@/constants/formType";
 import { Spinner } from "@/components/ui/spinner";
 import { useComponent } from "@/hooks/components/useComponent";
 import { useUpdateComponent } from "@/hooks/components/useUpdateComponent";
@@ -87,7 +88,7 @@ export const EditComponentDialog = ({
 
         <FormProvider {...form}>
           <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
-            <ComponentFormFields formId={formId} />
+            <ComponentFormFields formId={formId} type={FormType.EDIT} />
           </form>
         </FormProvider>
 
