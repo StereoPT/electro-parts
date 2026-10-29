@@ -15,6 +15,7 @@ export const useDeleteComponent = (componentId: string) => {
       return Promise.all([
         queryClient.invalidateQueries({ queryKey: KEYS.components }),
         queryClient.invalidateQueries({ queryKey: KEYS.categories }),
+        queryClient.invalidateQueries({ queryKey: KEYS.adjustments }),
       ]);
     },
     onError: () => {
