@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ElectroParts
 
-## Getting Started
+A personal inventory of the electronic components you own, and how many of each.
 
-First, run the development server:
+## Features
+
+- **Components**: keep a list of the parts you own, with name, manufacturer, description and quantity.
+- **Categories**: group Components into a flat list of Categories (e.g. "Resistors"), and see how many Components each one holds.
+- **Minimum Quantity**: set how many of a Component you want on hand. Components at or below it are flagged as low stock, and at zero as out of stock.
+- **Adjustments**: record a Purchase or a Usage (for example, in a project) with a date and a reason. Quantity changes only through Adjustments, so the history always explains the number.
+- **Adjustments page**: a read-only history of every Adjustment, newest first.
+
+The domain language (Component, Quantity, Category, Adjustment, ...) is defined in [`GLOSSARY.md`](GLOSSARY.md).
+
+## Tech stack
+
+- [Next.js](https://nextjs.org) (App Router) with React and TypeScript
+- [Prisma](https://www.prisma.io) with SQLite
+- [TanStack Query](https://tanstack.com/query) on top of Server Actions
+- [Tailwind CSS](https://tailwindcss.com), [shadcn/ui](https://ui.shadcn.com) and [Base UI](https://base-ui.com)
+- [React Hook Form](https://react-hook-form.com) and [Zod](https://zod.dev)
+- [Biome](https://biomejs.dev) for linting and formatting
+
+## Getting started
+
+You need [Node.js](https://nodejs.org) and [pnpm](https://pnpm.io).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env
+pnpm prisma migrate dev
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `pnpm install` also generates the Prisma client (`postinstall`).
+- `.env` holds `DATABASE_URL`, which points at a local SQLite file (`prisma/dev.db` by default).
+- Run `pnpm prisma migrate dev` again after changing `prisma/schema.prisma`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts
 
-## Learn More
+| Command                | What it does                  |
+| ---------------------- | ----------------------------- |
+| `pnpm dev`             | Start the development server |
+| `pnpm build`           | Build for production          |
+| `pnpm start`           | Run the production build      |
+| `pnpm lint`            | Check code with Biome         |
+| `pnpm format`          | Format code with Biome        |
 
-To learn more about Next.js, take a look at the following resources:
+## Project structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```text
+src/
+├── actions/       # "use server" actions: the only place Prisma is used
+├── app/           # routes and pages
+├── components/    # UI, grouped by entity (components, categories, adjustments)
+├── constants/     # table columns, query keys
+├── hooks/         # TanStack Query hooks that wrap the actions
+├── lib/           # shared helpers
+└── schemas/       # Zod schemas shared by forms and actions
+prisma/            # schema and migrations
+docs/adr/          # architecture decision records
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Data access goes through Server Actions for both reads and writes ([ADR 0001](docs/adr/0001-server-actions-for-reads-and-writes.md)), and Quantity changes only through Adjustments ([ADR 0002](docs/adr/0002-quantity-changes-only-through-adjustments.md)).
