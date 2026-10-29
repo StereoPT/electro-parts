@@ -14,7 +14,9 @@ export const UpdateComponent = async (
   componentId: string,
   values: editComponentSchemaType,
 ) => {
-  const { success, data } = await editComponentSchema.safeParseAsync(values);
+  const { success, data } = await editComponentSchema
+    .omit({ quantity: true })
+    .safeParseAsync(values);
 
   if (!success) {
     throw new Error("Invalid form data");
