@@ -19,6 +19,8 @@ model Component {
   categoryId      String?
   category        Category?         @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
+  adjustments     Adjustment[]
+
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
 
@@ -34,4 +36,23 @@ model Category {
 
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
+}
+
+enum AdjustmentKind {
+  PURCHASE
+  USAGE
+}
+
+model Adjustment {
+  id              String            @id @default(uuid())
+
+  kind            AdjustmentKind
+  units           Int
+  date            String
+  reason          String            @default("")
+
+  componentId     String
+  component       Component         @relation(fields: [componentId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime          @default(now())
 }
