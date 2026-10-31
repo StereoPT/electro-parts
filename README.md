@@ -15,7 +15,7 @@ The domain language (Component, Quantity, Category, Adjustment, ...) is defined 
 ## Tech stack
 
 - [Next.js](https://nextjs.org) (App Router) with React and TypeScript
-- [Prisma](https://www.prisma.io) with SQLite
+- [Prisma](https://www.prisma.io) with PostgreSQL
 - [TanStack Query](https://tanstack.com/query) on top of Server Actions
 - [Tailwind CSS](https://tailwindcss.com), [shadcn/ui](https://ui.shadcn.com) and [Base UI](https://base-ui.com)
 - [React Hook Form](https://react-hook-form.com) and [Zod](https://zod.dev)
@@ -23,11 +23,12 @@ The domain language (Component, Quantity, Category, Adjustment, ...) is defined 
 
 ## Getting started
 
-You need [Node.js](https://nodejs.org) and [pnpm](https://pnpm.io).
+You need [Node.js](https://nodejs.org), [pnpm](https://pnpm.io) and [Docker](https://www.docker.com) (for the local PostgreSQL).
 
 ```bash
 pnpm install
-cp .env.example .env
+cp .env.example .env   # then fill in the values
+docker compose up -d
 pnpm prisma migrate dev
 pnpm dev
 ```
@@ -35,7 +36,8 @@ pnpm dev
 Then open [http://localhost:3000](http://localhost:3000).
 
 - `pnpm install` also generates the Prisma client (`postinstall`).
-- `.env` holds `DATABASE_URL`, which points at a local SQLite file (`prisma/dev.db` by default).
+- `.env` holds the `POSTGRES_*` credentials used by `docker-compose.yml` and the `DATABASE_URL` connection string (for example `postgresql://<user>:<password>@localhost:5432/<db>`).
+- `docker compose up -d` starts PostgreSQL 17 with its data in a Docker volume.
 - Run `pnpm prisma migrate dev` again after changing `prisma/schema.prisma`.
 
 ## Scripts

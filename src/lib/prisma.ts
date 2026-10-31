@@ -1,8 +1,14 @@
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 import { PrismaClient } from "@/generated/prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+
+const configuredDatabaseUrl = process.env.DATABASE_URL;
+
+if (!configuredDatabaseUrl) {
+  throw new Error("DATABASE_URL is required to initialize electro-parts");
+}
 
 const createPrismaClient = () => {
-  const adapter = new PrismaBetterSqlite3({ url: process.env.DATABASE_URL });
+  const adapter = new PrismaPg({ connectionString: configuredDatabaseUrl });
   return new PrismaClient({ adapter });
 };
 
