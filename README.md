@@ -29,13 +29,14 @@ You need [Node.js](https://nodejs.org), [pnpm](https://pnpm.io) and [Docker](htt
 pnpm install
 cp .env.example .env   # then fill in the values
 docker compose up -d
+pnpm db:generate
 pnpm prisma migrate dev
 pnpm dev
 ```
 
 Then open [http://localhost:3000](http://localhost:3000).
 
-- `pnpm install` also generates the Prisma client (`postinstall`).
+- `pnpm db:generate` generates the Prisma client into `src/generated/prisma`. It needs `DATABASE_URL`, so run it after creating `.env`, and again after changing `prisma/schema.prisma`.
 - `.env` holds the `POSTGRES_*` credentials used by `docker-compose.yml` and the `DATABASE_URL` connection string (for example `postgresql://<user>:<password>@localhost:5432/<db>`).
 - `docker compose up -d` starts PostgreSQL 17 with its data in a Docker volume.
 - Run `pnpm prisma migrate dev` again after changing `prisma/schema.prisma`.
@@ -49,6 +50,7 @@ Then open [http://localhost:3000](http://localhost:3000).
 | `pnpm start`           | Run the production build      |
 | `pnpm lint`            | Check code with Biome         |
 | `pnpm format`          | Format code with Biome        |
+| `pnpm db:generate`     | Generate the Prisma client    |
 
 ## Project structure
 
